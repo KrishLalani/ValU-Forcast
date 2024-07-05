@@ -45,11 +45,11 @@ router.get('/validate-user/:uid', (req, res) => {
       }
   
       if (results.length > 0) {
-        res.json({ message: 'user_exists',
+        res.status(200).json({ message: 'user_exists',
             "type" : results[0].type
          });
       } else {
-        res.json({ message: 'please_sign_up',
+        res.status(200).json({ message: 'please_sign_up',
          });
       }
     });
