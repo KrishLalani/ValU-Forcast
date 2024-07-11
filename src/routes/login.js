@@ -12,6 +12,7 @@ const pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     timezone: "Z",
+    connectTimeout: 10000 // 10 seconds
     // port: process.env.DB_PORT,
     // socketPath: process.env.DB_SOCKET_PATH // Ensure the correct path variable
 });
