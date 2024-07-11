@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
-const mysql = require('mysql');
+const sql = require('mssql');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const moment = require('moment');
@@ -16,45 +16,63 @@ app.use(express.json());
 
 const { verifyToken, checkRole } = vverifyToken;
 
-// Database connection
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
+// Database connection configuration
+const dbConfig = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
+    server: process.env.DB_HOST,
     database: process.env.DB_NAME,
-    timezone: "Z",
-    connectTimeout: 10000 // 10 seconds
-});
+    options: {
+        encrypt: true, // Use encryption if the database server supports it
+        trustServerCertificate: true // Change to true for local dev / self-signed certs
+    }
+};
 
-connection.connect((err) => {
+// Connect to the database
+sql.connect(dbConfig, err => {
     if (err) {
-        console.error('Error connecting to MySQL:', err.stack);
+        console.error('Error connecting to SQL Server:', err);
         return;
     }
-    console.log('Connected to MySQL as id', connection.threadId);
+    console.log('Connected to SQL Server');
 });
 
+// Middleware to ensure connection is alive for each request
+app.use((req, res, next) => {
+    if (sql.globalConnection && sql.globalConnection.connected) {
+        return next();
+    }
+    sql.connect(dbConfig, err => {
+        if (err) {
+            console.error('Error re-connecting to SQL Server:', err);
+            res.status(500).json({ status: 'error', message: 'Database connection error' });
+        } else {
+            next();
+        }
+    });
+});
 
 router.get('/validate-user/:uid', (req, res) => {
     const { uid } = req.params;
-  
-    const query = 'SELECT * FROM user WHERE uid = ?';
-    connection.query(query, [uid], (err, results) => {
-      if (err) {
-        res.status(500).json({ status: 'error', message: err.message });
-        return;
-      }
-  
-      if (results.length > 0) {
-        res.status(200).json({ message: 'user_exists',
-            "type" : results[0].type
-         });
-      } else {
-        res.status(200).json({ message: 'please_sign_up',
-         });
-      }
+
+    const query = 'SELECT * FROM [user] WHERE uid = @uid';
+    const request = new sql.Request();
+    request.input('uid', sql.VarChar, uid);
+    request.query(query, (err, result) => {
+        if (err) {
+            res.status(500).json({ status: 'error', message: err.message });
+            return;
+        }
+
+        if (result.recordset.length > 0) {
+            res.json({
+                message: 'user_exists',
+                "type": result.recordset[0].type
+            });
+        } else {
+            res.json({ message: 'please_sign_up' });
+        }
     });
-    
 });
 
 module.exports = router;
