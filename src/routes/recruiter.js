@@ -25,6 +25,7 @@ const connection = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   timezone: "Z",
+  connectTimeout: 10000 // 10 seconds
   // socketPath: process.env.DB_SOCKET_PATH,
 });
 
