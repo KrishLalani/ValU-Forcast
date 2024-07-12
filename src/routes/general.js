@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
-const sql = require('mssql');
+const sql = require('mysql');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const moment = require('moment');
