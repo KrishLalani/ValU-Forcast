@@ -17,10 +17,16 @@ app.use(express.json());
 const { verifyToken, checkRole } = vverifyToken;
 
 // Database connection configuration
+
+    // user: process.env.DB_USER,
+    // password: process.env.DB_PASSWORD,
+    // server: process.env.DB_HOST,
+    // database: process.env.DB_NAME,
 const dbConfig = {
+    port:process.env.DB_PORT,
+    host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    server: process.env.DB_HOST,
     database: process.env.DB_NAME,
     options: {
         encrypt: true, // Use encryption if the database server supports it
