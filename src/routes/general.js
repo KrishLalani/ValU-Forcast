@@ -97,7 +97,6 @@ router.post('/register', async (req, res) => {
           return;
         }
 
-       
 
         const userQuery = 'SELECT uid, username, user_mail,type,profile_img FROM user WHERE uid = ?';
         connection.query(userQuery, [results.insertId], (err, userResult) => {
@@ -140,11 +139,5 @@ router.post('/register', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
-<<<<<<< HEAD
-=======
 
-
-
-
->>>>>>> a5199ae2da0fe6fde180f0a06398320e31f86b60
 module.exports = router;
