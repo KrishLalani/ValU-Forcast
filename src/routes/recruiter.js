@@ -39,7 +39,7 @@ connection.connect((err) => {
 
 
 /// to insert data into recruiter table with details
-router.post("/registerRecruiterProfileDetails/:uid", verifyToken, (req, res) => {
+router.post("/registerRecruiterProfileDetails/:uid",(req, res) => {
   const { recruiter_name, shop_name, work_time, aboutShop, address, city, state } = req.body;
   const { uid } = req.params; // Extracting uid from request params
 
