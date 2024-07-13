@@ -38,6 +38,30 @@ connection.connect((err) => {
 });
 
 
+/// to insert data into recruiter table with details
+router.post("/registerRecruiterProfileDetails/:uid",(req, res) => {
+  const { recruiter_name, shop_name, work_time, aboutShop, address, city, state } = req.body;
+  const { uid } = req.params; // Extracting uid from request params
+
+  if (!recruiter_name || !shop_name || !work_time || !aboutShop || !address || !city || !state) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  const query = `
+    INSERT INTO recruiter (uid, recruiter_name, shop_name, work_time, about_shop, address, city, state)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [uid, recruiter_name, shop_name, work_time, aboutShop, address, city, state];
+
+  connection.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error inserting data:", err);
+      return res.status(500).json({ message: "Internal server error." });
+    }
+    res.status(201).json({ message: "Recruiter profile created successfully." });
+  });
+});
 
 
 module.exports = router;

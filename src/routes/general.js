@@ -140,4 +140,11 @@ router.post('/register', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> a5199ae2da0fe6fde180f0a06398320e31f86b60
 module.exports = router;
