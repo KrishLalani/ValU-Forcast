@@ -48,7 +48,7 @@ router.post("/registerRecruiterProfileDetails/:uid",(req, res) => {
   }
 
   const query = `
-    INSERT INTO recruiter (uid, recruiter_name, shop_name, work_time, aboutShop, address, city, state)
+    INSERT INTO recruiter (uid, recruiter_name, shop_name, work_time, about_shop, address, city, state)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
