@@ -123,26 +123,29 @@ router.post("/register", async (req, res) => {
                 id: userResult[0].id,
               },
             };
-            jwt.sign(
-              payload,
-              "yourSecretKey", // Replace with your own secret key
-              { expiresIn: "1h" },
-              (err, token) => {
-                if (err) {
-                  return res
-                    .status(500)
-                    .json({ status: "error", message: err.message });
-                }
-                console.log(userResult);
-                res.json({
-                  token,
-                  username: userResult[0].username,
-                  user_mail: userResult[0].user_mail,
-                  type: userResult[0].type,
-                  profile_img: userResult[0].profile_img,
-                });
-              }
-            );
+
+
+            // jwt verification
+            // jwt.sign(
+            //   payload,
+            //   "yourSecretKey", // Replace with your own secret key
+            //   { expiresIn: "1h" },
+            //   (err, token) => {
+            //     if (err) {
+            //       return res
+            //         .status(500)
+            //         .json({ status: "error", message: err.message });
+            //     }
+            //     console.log(userResult);
+            //     res.json({
+            //       token,
+            //       username: userResult[0].username,
+            //       user_mail: userResult[0].user_mail,
+            //       type: userResult[0].type,
+            //       profile_img: userResult[0].profile_img,
+            //     });
+            //   }
+            // );
           });
 
           // Here END
